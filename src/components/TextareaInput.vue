@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 
 const props = defineProps({
   expectedPhrase: {
@@ -109,6 +109,12 @@ const checkWords = () => {
     newData.push(word)
   }
 
+  // check if correct
+  if (props.expectedPhrase === typedPhrase.value) {
+    typedPhrase.value = ''
+    emit('correct')
+  }
+
   expectedWords.value = newData
   updateCaretPosition()
   blinking.value = false
@@ -128,8 +134,17 @@ const handleHideCaret = () => {
   blinking.value = true
 }
 
+const emit = defineEmits(['correct'])
+
 onMounted(() => {
   expectedWords.value = getWordsFromPhrase()
+  typedPhrase.value = ''
+  updateCaretPosition()
+})
+
+watch(props, () => {
+  expectedWords.value = getWordsFromPhrase()
+  typedPhrase.value = ''
   updateCaretPosition()
 })
 </script>
