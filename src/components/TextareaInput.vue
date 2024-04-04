@@ -161,8 +161,8 @@ watch(props, () => {
       rows="1"
     ></textarea>
 
-    <div class="flex font-mono cursor-text" @click="focusTextarea">
-      <div ref="textContainer" class="flex">
+    <div class="font-mono cursor-text" @click="focusTextarea">
+      <div ref="textContainer" class="flex flex-wrap">
         <div v-for="(word, index) in expectedWords" :key="index" class="text-2xl m-1.5">
           <span
             v-for="letter in word.letters"
