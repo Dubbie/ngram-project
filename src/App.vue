@@ -98,7 +98,7 @@ onMounted(() => {
 <template>
   <div class="bg-zinc-800 text-white min-h-dvh py-20">
     <main class="max-w-xl mx-auto">
-      <h1 class="text-xl font-semibold text-zinc-400 tracking-wide mb-6">
+      <h1 class="text-xl font-semibold text-zinc-400 tracking-wide mb-6 mx-1.5">
         Lesson {{ dataSource.phrasesCurrentIndex + 1 }} / {{ dataSource.phrases.length }}
       </h1>
 

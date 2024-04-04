@@ -180,7 +180,7 @@ watch(props, () => {
 
     <div
       ref="caret"
-      class="absolute w-[2px] bg-white h-6 top-1/2 -translate-y-1/2"
+      class="absolute w-[2px] bg-white h-6 top-1/2 -translate-y-1/2 transition-all duration-100"
       :class="{
         'caret-blink': blinking
       }"
