@@ -15,16 +15,28 @@ const caret = ref(null)
 const showCaret = ref(false)
 const blinking = ref(false)
 const textContainer = ref(null)
+const lettersRef = ref([])
 
 const updateCaretPosition = () => {
-  // Get position of the caret
-  const selection = typedPhrase.value.length
-  const divRect = textContainer.value.getBoundingClientRect()
-  const textWidth = divRect.width - 12
-  const widthPerChar = textWidth / expectedWords.value.map((word) => word.word).join(' ').length
-  const left = selection * widthPerChar
-  // Update caret position
-  caret.value.style.left = left + 5 + 'px'
+  const lettersArray = lettersRef.value
+  if (lettersArray.length < 1) {
+    return
+  }
+
+  const typedPhraseWithoutSpaces = typedPhrase.value.replaceAll(' ', '')
+  const lastIsSpace = typedPhrase.value[typedPhrase.value.length - 1] === ' '
+  let letterElement = lettersArray[typedPhraseWithoutSpaces.length - 1]
+  if (lastIsSpace) {
+    letterElement = lettersArray[typedPhraseWithoutSpaces.length]
+  }
+  const letterRect = letterElement.getBoundingClientRect()
+  const textContainterRect = textContainer.value.getBoundingClientRect()
+  const left = letterRect.left - textContainterRect.left
+  const top = letterRect.top - textContainterRect.top
+  const moveCaretRight = lastIsSpace ? 0 : letterRect.width
+
+  caret.value.style.left = left + moveCaretRight + 'px'
+  caret.value.style.top = top + 'px'
 }
 
 const getWordsFromPhrase = () => {
@@ -56,6 +68,9 @@ const getWordsFromPhrase = () => {
 }
 
 const checkWords = () => {
+  // dont enable double or more spaces
+  typedPhrase.value = typedPhrase.value.replaceAll('  ', ' ')
+
   const typedWords = typedPhrase.value.split(' ')
   let newData = []
 
@@ -166,6 +181,7 @@ watch(props, () => {
         <div v-for="(word, index) in expectedWords" :key="index" class="text-2xl m-1.5">
           <span
             v-for="letter in word.letters"
+            ref="lettersRef"
             :class="{
               'text-white': letter.type === 'correct',
               'text-white/30': letter.type === 'placeholder',
@@ -180,7 +196,7 @@ watch(props, () => {
 
     <div
       ref="caret"
-      class="absolute w-[2px] bg-white h-6 top-1/2 -translate-y-1/2 transition-all duration-100"
+      class="absolute w-[2px] bg-white h-6 transition-all duration-100"
       :class="{
         'caret-blink': blinking
       }"

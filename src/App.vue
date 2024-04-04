@@ -13,7 +13,7 @@ const config = ref({
     source: 'bigrams',
     bigrams: {
       scope: 50,
-      combination: 2,
+      combination: 20,
       repetition: 3,
       phrases: [],
       phrasesCurrentIndex: 0
