@@ -113,8 +113,13 @@ const changeNgramSource = (newSource) => {
   refreshPhrases()
 }
 
-const handleConfigUpdate = (key, newData) => {
+const handleSourceConfigUpdate = (key, newData) => {
   config.value.data[sourceName.value][key] = newData
+  refreshPhrases()
+}
+
+const handleConfigUpdate = (key, newData) => {
+  config.value[key] = newData
   refreshPhrases()
 }
 
@@ -125,11 +130,12 @@ onMounted(() => {
 
 <template>
   <div class="bg-zinc-800 text-white min-h-dvh py-20">
-    <main class="max-w-xl mx-auto">
+    <main class="max-w-2xl mx-auto">
       <AppSettings
         :config="config"
         :sources="sourceOptions"
         @change-source="changeNgramSource"
+        @update-source-config="handleSourceConfigUpdate"
         @update-config="handleConfigUpdate"
       />
 
@@ -138,7 +144,11 @@ onMounted(() => {
       </h1>
 
       <div>
-        <TextareaInput :expected-phrase="config.expectedPhrase" @correct="nextPhrase" />
+        <TextareaInput
+          :expected-phrase="config.expectedPhrase"
+          :min-accuracy="config.minAccuracy"
+          @correct="nextPhrase"
+        />
       </div>
     </main>
   </div>

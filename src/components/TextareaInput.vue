@@ -1,9 +1,13 @@
 <script setup>
-import { ref, onMounted, watch, onUpdated } from 'vue'
+import { ref, onMounted, watch, onUpdated, computed } from 'vue'
 
 const props = defineProps({
   expectedPhrase: {
     type: String,
+    required: true
+  },
+  minAccuracy: {
+    type: Number,
     required: true
   }
 })
@@ -18,6 +22,7 @@ const textContainer = ref(null)
 const lettersRef = ref([])
 const wordsRef = ref([])
 const activeWordIndex = ref(0)
+const missedCharacters = ref(0)
 
 const getPosition = (element) => {
   const rect = element.getBoundingClientRect()
@@ -39,7 +44,7 @@ const updateCaretPosition = () => {
   }
   // count completed words letters
   for (let index = 0; index < activeWordIndex.value; index++) {
-    currentLetterIndex += expectedWords.value[index].word.length
+    currentLetterIndex += expectedWords.value[index].letters.length
   }
   const letters = textContainer.value.querySelectorAll('.letter')
   const currentLetter = letters[currentLetterIndex]
@@ -88,34 +93,59 @@ const getWordsFromPhrase = () => {
 }
 
 const handleKeypress = (event) => {
+  if (event.keyCode === 8) {
+    event.preventDefault()
+    handleBackspace()
+    return
+  }
   if (event.keyCode === 32) {
     event.preventDefault()
     handleSpace()
   }
 }
 
-const handleSpace = () => {
-  const activeWord = expectedWords.value[activeWordIndex.value].word
-  const typedSoFar = typedPhrase.value.trim()
-
-  // check if word is the same as active word
-  if (typedSoFar === activeWord) {
-    // check if next word exists
-    if (activeWordIndex.value < expectedWords.value.length - 1) {
-      activeWordIndex.value += 1
-      resetTypedPhrase()
+const handleBackspace = () => {
+  if (typedPhrase.value.length > 0) {
+    typedPhrase.value = typedPhrase.value.slice(0, -1)
+  } else {
+    // go back one word
+    if (activeWordIndex.value > 0) {
+      activeWordIndex.value = activeWordIndex.value - 1
+      typedPhrase.value = expectedWords.value[activeWordIndex.value].letters
+        .map((letterData) => {
+          return letterData.letter
+        })
+        .join('')
     }
   }
 }
 
-const handleKeyup = () => {
-  compareInput()
+const handleSpace = () => {
+  // check if next word exists
+  if (activeWordIndex.value < expectedWords.value.length - 1) {
+    activeWordIndex.value += 1
+    resetTypedPhrase()
+  }
+}
+
+const handleKeyup = (event) => {
+  const checkCorrectness = event.keyCode !== 8
+  compareInput(checkCorrectness)
   blinking.value = false
 }
 
-const compareInput = () => {
+const compareInput = (checkCorrectness = true) => {
   const activeWordData = expectedWords.value[activeWordIndex.value]
   const activeWord = activeWordData.word
+
+  // check if last character is correct
+  if (checkCorrectness) {
+    const isCorrect =
+      typedPhrase.value[typedPhrase.value.length - 1] === activeWord[typedPhrase.value.length - 1]
+    if (!isCorrect) {
+      missedCharacters.value += 1
+    }
+  }
 
   // reset the letters inside the active word
   expectedWords.value[activeWordIndex.value].letters = []
@@ -149,9 +179,26 @@ const compareInput = () => {
     activeWordIndex.value === expectedWords.value.length - 1 &&
     typedPhrase.value === expectedWords.value[activeWordIndex.value].word
   ) {
-    typedPhrase.value = ''
-    emit('correct')
+    // check if user had correct accuracy
+    checkStatistics()
   }
+}
+
+const checkStatistics = () => {
+  console.log('missed characters', missedCharacters.value)
+  const accuracy =
+    100 - (missedCharacters.value / props.expectedPhrase.replaceAll(' ', '').length) * 100
+  console.log('accuracy', accuracy)
+  console.log('min accuracy', props.minAccuracy)
+
+  if (accuracy < props.minAccuracy) {
+    reset()
+    return
+  }
+
+  missedCharacters.value = 0
+  typedPhrase.value = ''
+  emit('correct')
 }
 
 const addLetterData = (letter, type) => {
@@ -193,6 +240,7 @@ const reset = () => {
     }
   }
   activeWordIndex.value = 0
+  missedCharacters.value = 0
 }
 
 const emit = defineEmits(['correct'])
@@ -221,7 +269,7 @@ onUpdated(() => {
       ref="textareaRef"
       v-model="typedPhrase"
       @keyup="handleKeyup"
-      @keypress="handleKeypress"
+      @keydown="handleKeypress"
       @focus="handleShowCaret"
       @blur="handleHideCaret"
       @keydown.tab.prevent="reset"

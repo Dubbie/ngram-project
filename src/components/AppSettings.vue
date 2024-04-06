@@ -17,14 +17,13 @@ const sourceName = computed(() => {
   return props.config.data.source
 })
 
-const emit = defineEmits(['change-source', 'update-config'])
+const emit = defineEmits(['change-source', 'update-config', 'update-source-config'])
 </script>
 
 <template>
-  <div class="-mx-1.5 mb-6 bg-zinc-900 px-1 py-2 rounded-xl">
-    <div class="flex text-sm font-semibold">
+  <div class="-mx-1.5 mb-6 bg-zinc-900 p-2 rounded-xl">
+    <div class="flex items-center text-sm font-semibold">
       <div>
-        <p class="text-xs font-bold mb-2 pl-2">source</p>
         <div class="flex">
           <p
             v-for="source in sources"
@@ -40,14 +39,14 @@ const emit = defineEmits(['change-source', 'update-config'])
           </p>
         </div>
       </div>
-      <div class="w-px bg-white/30 mx-2"></div>
-      <div class="flex flex-col gap-y-2">
+      <div class="w-px h-6 bg-white/30 mx-3"></div>
+      <div class="flex items-center gap-x-3">
         <div class="flex items-center gap-x-3">
           <label class="block text-xs font-bold">Combinations</label>
           <TextInput
             :model-value="config.data[sourceName].combination"
             class="w-10 text-right"
-            @update:model-value="$emit('update-config', 'combination', $event)"
+            @update:model-value="$emit('update-source-config', 'combination', $event)"
           />
         </div>
         <div class="flex items-center gap-x-3">
@@ -55,11 +54,29 @@ const emit = defineEmits(['change-source', 'update-config'])
           <TextInput
             :model-value="config.data[sourceName].repetition"
             class="w-10 text-right"
-            @update:model-value="$emit('update-config', 'repetiton', $event)"
+            @update:model-value="$emit('update-source-config', 'repetiton', $event)"
           />
         </div>
       </div>
-      <div class="w-px bg-white/30 mx-2"></div>
+      <div class="w-px h-6 bg-white/30 mx-3"></div>
+      <div class="flex items-center gap-x-3">
+        <div class="flex items-center gap-x-3">
+          <label class="block text-xs font-bold">WPM</label>
+          <TextInput
+            :model-value="config.minWpm"
+            class="w-10 text-right"
+            @update:model-value="$emit('update-config', 'minWpm', $event)"
+          />
+        </div>
+        <div class="flex items-center gap-x-3">
+          <label class="block text-xs font-bold">Accuracy</label>
+          <TextInput
+            :model-value="config.minAccuracy"
+            class="w-10 text-right"
+            @update:model-value="$emit('update-config', 'minAccuracy', $event)"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </template>
