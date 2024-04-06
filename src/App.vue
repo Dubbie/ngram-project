@@ -1,4 +1,5 @@
 <script setup>
+import AppSettings from './components/AppSettings.vue'
 import TextareaInput from './components/TextareaInput.vue'
 import TextInput from './components/TextInput.vue'
 import { computed, onMounted, ref } from 'vue'
@@ -82,8 +83,6 @@ const generatePhrases = (numberOfItemsToCombine, repetitions) => {
 const refreshPhrases = () => {
   let _dataSource = dataSource.value
 
-  console.log(_dataSource)
-
   if (_dataSource.combination < 1) {
     _dataSource.combination = 1
   }
@@ -127,48 +126,12 @@ onMounted(() => {
 <template>
   <div class="bg-zinc-800 text-white min-h-dvh py-20">
     <main class="max-w-xl mx-auto">
-      <div class="-mx-1.5 mb-6 bg-zinc-900 px-1 py-2 rounded-xl">
-        <div class="flex text-sm font-semibold">
-          <div>
-            <p class="text-xs font-bold mb-2 pl-2">source</p>
-            <div class="flex">
-              <p
-                v-for="source in sourceOptions"
-                :key="source"
-                class="cursor-pointer rounded-lg px-2 py-0.5"
-                :class="{
-                  'text-white': config.data.source === source,
-                  'text-white/40 hover:bg-white/10 hover:text-white/70':
-                    config.data.source !== source
-                }"
-                @click="changeNgramSource(source)"
-              >
-                {{ source }}
-              </p>
-            </div>
-          </div>
-          <div class="w-px bg-white/30 mx-2"></div>
-          <div class="flex flex-col gap-y-2">
-            <div class="flex items-center gap-x-3">
-              <label class="block text-xs font-bold">Combinations</label>
-              <TextInput
-                :model-value="config.data[sourceName].combination"
-                class="w-10 text-right"
-                @update:model-value="handleConfigUpdate('combination', $event)"
-              />
-            </div>
-            <div class="flex items-center gap-x-3">
-              <label class="block text-xs font-bold">Repetitions</label>
-              <TextInput
-                :model-value="config.data[sourceName].repetition"
-                class="w-10 text-right"
-                @update:model-value="handleConfigUpdate('repetition', $event)"
-              />
-            </div>
-          </div>
-          <div class="w-px bg-white/30 mx-2"></div>
-        </div>
-      </div>
+      <AppSettings
+        :config="config"
+        :sources="sourceOptions"
+        @change-source="changeNgramSource"
+        @update-config="handleConfigUpdate"
+      />
 
       <h1 class="text-xl font-semibold text-zinc-400 tracking-wide mb-6 mx-1.5">
         Lesson {{ dataSource.phrasesCurrentIndex + 1 }} / {{ dataSource.phrases.length }}
