@@ -13,7 +13,7 @@ const config = ref({
     source: 'bigrams',
     bigrams: {
       scope: 50,
-      combination: 20,
+      combination: 2,
       repetition: 3,
       phrases: [],
       phrasesCurrentIndex: 0
@@ -148,17 +148,17 @@ onMounted(() => {
             </div>
           </div>
           <div class="w-px bg-white/30 mx-2"></div>
-          <div class="flex gap-x-3">
-            <div>
-              <label class="block text-xs font-bold mb-2">Combinations</label>
+          <div class="flex flex-col gap-y-2">
+            <div class="flex items-center gap-x-3">
+              <label class="block text-xs font-bold">Combinations</label>
               <TextInput
                 :model-value="config.data[sourceName].combination"
                 class="w-10 text-right"
                 @update:model-value="handleConfigUpdate('combination', $event)"
               />
             </div>
-            <div>
-              <label class="block text-xs font-bold mb-2">Repetitions</label>
+            <div class="flex items-center gap-x-3">
+              <label class="block text-xs font-bold">Repetitions</label>
               <TextInput
                 :model-value="config.data[sourceName].repetition"
                 class="w-10 text-right"
@@ -166,6 +166,7 @@ onMounted(() => {
               />
             </div>
           </div>
+          <div class="w-px bg-white/30 mx-2"></div>
         </div>
       </div>
 
