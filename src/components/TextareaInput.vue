@@ -110,6 +110,7 @@ const handleSpace = () => {
 
 const handleKeyup = () => {
   compareInput()
+  blinking.value = false
 }
 
 const compareInput = () => {
