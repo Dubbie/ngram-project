@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, watch, onUpdated, computed } from 'vue'
+import { ref, onMounted, watch, onUpdated } from 'vue'
 
 const props = defineProps({
   expectedPhrase: {
@@ -7,6 +7,10 @@ const props = defineProps({
     required: true
   },
   minAccuracy: {
+    type: Number,
+    required: true
+  },
+  minWpm: {
     type: Number,
     required: true
   }
@@ -23,6 +27,7 @@ const lettersRef = ref([])
 const wordsRef = ref([])
 const activeWordIndex = ref(0)
 const missedCharacters = ref(0)
+const startTime = ref(null)
 
 const getPosition = (element) => {
   const rect = element.getBoundingClientRect()
@@ -132,6 +137,9 @@ const handleKeyup = (event) => {
   const checkCorrectness = event.keyCode !== 8
   compareInput(checkCorrectness)
   blinking.value = false
+  if (!startTime.value) {
+    startTime.value = Date.now()
+  }
 }
 
 const compareInput = (checkCorrectness = true) => {
@@ -185,13 +193,19 @@ const compareInput = (checkCorrectness = true) => {
 }
 
 const checkStatistics = () => {
-  console.log('missed characters', missedCharacters.value)
   const accuracy =
     100 - (missedCharacters.value / props.expectedPhrase.replaceAll(' ', '').length) * 100
-  console.log('accuracy', accuracy)
-  console.log('min accuracy', props.minAccuracy)
+  const accuracyFormatted = Math.round(accuracy)
+  const endTime = Date.now()
+  const elapsedInMinutes = (endTime - startTime.value) / 1000 / 60
+  const wpm = Math.round(expectedWords.value.length / elapsedInMinutes)
 
-  if (accuracy < props.minAccuracy) {
+  emit('update-statistics', {
+    accuracy: accuracyFormatted,
+    wpm: wpm
+  })
+
+  if (accuracy < props.minAccuracy || wpm < props.minWpm) {
     reset()
     return
   }
@@ -241,20 +255,19 @@ const reset = () => {
   }
   activeWordIndex.value = 0
   missedCharacters.value = 0
+  startTime.value = null
 }
 
-const emit = defineEmits(['correct'])
+const emit = defineEmits(['correct', 'update-statistics'])
 
 onMounted(() => {
   expectedWords.value = getWordsFromPhrase()
-  activeWordIndex.value = 0
-  typedPhrase.value = ''
+  reset()
 })
 
 watch(props, () => {
   expectedWords.value = getWordsFromPhrase()
-  typedPhrase.value = ''
-  activeWordIndex.value = 0
+  reset()
 })
 
 onUpdated(() => {

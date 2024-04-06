@@ -1,11 +1,11 @@
 <script setup>
 import AppSettings from './components/AppSettings.vue'
 import TextareaInput from './components/TextareaInput.vue'
-import TextInput from './components/TextInput.vue'
 import { computed, onMounted, ref } from 'vue'
 
 const sourceOptions = ['bigrams', 'trigrams']
 
+const statistics = ref(null)
 const config = ref({
   bigrams: bigrams,
   trigrams: trigrams,
@@ -123,6 +123,10 @@ const handleConfigUpdate = (key, newData) => {
   refreshPhrases()
 }
 
+const handleStatistics = (statData) => {
+  statistics.value = statData
+}
+
 onMounted(() => {
   refreshPhrases()
 })
@@ -139,15 +143,27 @@ onMounted(() => {
         @update-config="handleConfigUpdate"
       />
 
-      <h1 class="text-xl font-semibold text-zinc-400 tracking-wide mb-6 mx-1.5">
-        Lesson {{ dataSource.phrasesCurrentIndex + 1 }} / {{ dataSource.phrases.length }}
-      </h1>
+      <div class="grid grid-cols-6">
+        <div class="col-span-4">
+          <h1 class="text-xl font-semibold text-zinc-400 tracking-wide mb-6 mx-1.5">
+            Lesson {{ dataSource.phrasesCurrentIndex + 1 }} / {{ dataSource.phrases.length }}
+          </h1>
+        </div>
+        <div v-if="statistics" class="text-sm font-semibold text-right">
+          <p><span class="text-zinc-400 text-xs mr-2">Accuracy</span>{{ statistics.accuracy }}%</p>
+        </div>
+        <div v-if="statistics" class="text-sm font-semibold text-right">
+          <p><span class="text-zinc-400 text-xs mr-2">WPM</span>{{ statistics.wpm }}</p>
+        </div>
+      </div>
 
       <div>
         <TextareaInput
           :expected-phrase="config.expectedPhrase"
           :min-accuracy="config.minAccuracy"
+          :min-wpm="config.minWpm"
           @correct="nextPhrase"
+          @update-statistics="handleStatistics"
         />
       </div>
     </main>
