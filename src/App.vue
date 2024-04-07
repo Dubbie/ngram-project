@@ -3,12 +3,32 @@ import AppSettings from './components/AppSettings.vue'
 import TextareaInput from './components/TextareaInput.vue'
 import { computed, onMounted, ref } from 'vue'
 
-const sourceOptions = ['bigrams', 'trigrams']
+const sourceOptions = ['bigrams', 'trigrams', 'tetragrams', 'words']
+const scopeOptions = [
+  {
+    label: '50',
+    value: 50
+  },
+  {
+    label: '100',
+    value: 100
+  },
+  {
+    label: '150',
+    value: 150
+  },
+  {
+    label: '200',
+    value: 200
+  }
+]
 
 const statistics = ref(null)
 const config = ref({
   bigrams: bigrams,
   trigrams: trigrams,
+  tetragrams: tetragrams,
+  words: words,
 
   data: {
     source: 'bigrams',
@@ -20,6 +40,20 @@ const config = ref({
       phrasesCurrentIndex: 0
     },
     trigrams: {
+      scope: 50,
+      combination: 2,
+      repetition: 3,
+      phrases: [],
+      phrasesCurrentIndex: 0
+    },
+    tetragrams: {
+      scope: 50,
+      combination: 2,
+      repetition: 3,
+      phrases: [],
+      phrasesCurrentIndex: 0
+    },
+    words: {
       scope: 50,
       combination: 2,
       repetition: 3,
@@ -138,6 +172,7 @@ onMounted(() => {
       <AppSettings
         :config="config"
         :sources="sourceOptions"
+        :scopes="scopeOptions"
         @change-source="changeNgramSource"
         @update-source-config="handleSourceConfigUpdate"
         @update-config="handleConfigUpdate"

@@ -46,6 +46,10 @@ const updateCaretPosition = () => {
   let currentLetterIndex = inputLen - 1
   if (currentLetterIndex == -1) {
     currentLetterIndex = 0
+
+    if (activeWordIndex.value === 0) {
+      blinking.value = true
+    }
   }
   // count completed words letters
   for (let index = 0; index < activeWordIndex.value; index++) {
@@ -55,16 +59,14 @@ const updateCaretPosition = () => {
   const currentLetter = letters[currentLetterIndex]
   const currentLetterPos = getPosition(currentLetter)
   const letterHeight = currentLetter.clientHeight
+  const caretWidth = caret.value.getBoundingClientRect().width
 
   if (typedPhrase.value.length === 0) {
-    caret.value.style.left = currentLetterPos.left - caret.value.clientWidth / 2 + 'px'
+    caret.value.style.left = currentLetterPos.left - caretWidth / 2 + 'px'
     caret.value.style.top = currentLetterPos.top + letterHeight / 4 + 'px'
   } else {
     caret.value.style.left =
-      currentLetterPos.left +
-      currentLetter.getBoundingClientRect().width -
-      caret.value.clientWidth / 2 +
-      'px'
+      currentLetterPos.left + currentLetter.getBoundingClientRect().width - caretWidth / 2 + 'px'
     caret.value.style.top = currentLetterPos.top + letterHeight / 4 + 'px'
   }
 }
@@ -137,7 +139,7 @@ const handleKeyup = (event) => {
   const checkCorrectness = event.keyCode !== 8
   compareInput(checkCorrectness)
   blinking.value = false
-  if (!startTime.value) {
+  if (!startTime.value && typedPhrase.value.length > 0) {
     startTime.value = Date.now()
   }
 }
