@@ -57,6 +57,11 @@ const updateCaretPosition = () => {
   }
   const letters = textContainer.value.querySelectorAll('.letter')
   const currentLetter = letters[currentLetterIndex]
+
+  if (!currentLetter) {
+    return
+  }
+
   const currentLetterPos = getPosition(currentLetter)
   const letterHeight = currentLetter.clientHeight
   const caretWidth = caret.value.getBoundingClientRect().width
