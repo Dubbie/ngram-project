@@ -13,8 +13,6 @@ const props = defineProps({
   }
 })
 
-console.log(props.options)
-
 const selected = computed(() => {
   return props.options.find((opt) => opt.value === props.modelValue)
 })
