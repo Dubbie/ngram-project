@@ -46,11 +46,14 @@ const emit = defineEmits(['change-source', 'update-config', 'update-source-confi
 
     <div class="-mx-1.5 mb-6 bg-zinc-900 p-2 rounded-xl">
       <div class="flex items-center text-sm font-semibold px-2">
-        <SelectInput
-          :model-value="config.data[sourceName].scope"
-          :options="scopes"
-          @update:model-value="$emit('update-source-config', 'scope', $event)"
-        />
+        <div class="flex items-center gap-x-3">
+          <label class="block text-xs font-bold">Scope</label>
+          <SelectInput
+            :model-value="config.data[sourceName].scope"
+            :options="scopes"
+            @update:model-value="$emit('update-source-config', 'scope', $event)"
+          />
+        </div>
         <div class="w-px h-6 bg-white/30 mx-3"></div>
         <div class="flex items-center gap-x-3">
           <div class="flex items-center gap-x-3">

@@ -31,7 +31,7 @@ const label = computed(() => {
     :model-value="modelValue"
     @update:model-value="$emit('update:model-value', $event)"
   >
-    <ListboxButton>{{ label }}</ListboxButton>
+    <ListboxButton class="rounded-lg bg-white/10 px-2 py-0.5">{{ label }}</ListboxButton>
     <ListboxOptions
       class="absolute top-full z-10 left-0 bg-zinc-900/70 p-1 -mx-1 rounded-lg backdrop-blur-sm"
     >
