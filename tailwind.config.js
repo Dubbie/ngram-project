@@ -2,7 +2,11 @@
 export default {
   content: ['./src/**/*.{js,ts,vue}'],
   theme: {
-    extend: {}
+    extend: {
+      fontFamily: {
+        mono: ['Fira Code', 'monospace']
+      }
+    }
   },
   plugins: []
 }
