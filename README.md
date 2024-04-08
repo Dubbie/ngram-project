@@ -1,35 +1,42 @@
-# ngram with vue3
+# N-gram practice app
 
-This template should help get you started developing with Vue 3 in Vite.
+This repository contains a web application built with [Vue.js](https://vuejs.org/) and [Vite](https://vitejs.dev/) where users can practice n-grams.
 
-## Recommended IDE Setup
+## Usage
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+Use the settings bar at the top to configure the phrase generation. Start typing the phrases.
 
-## Customize configuration
+## Local development
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+To run this application locally, follow these steps:
 
-## Project Setup
+1. Clone this repository to your local machine
 
-```sh
+```
+git clone https://github.com/Dubbie/ngram-project.git
+```
+
+2. Install dependencies
+
+```
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+3. Start the application
 
-```sh
+```
 npm run dev
 ```
 
-### Compile and Minify for Production
+4. Open [http://localhost:5173](http://localhost:5173) in your browser to view the application.
 
-```sh
-npm run build
-```
+## Technologies used
 
-### Lint with [ESLint](https://eslint.org/)
+- [Vue.js](https://vuejs.org/) - UI framework
+- [Vite](https://vitejs.dev/) - Build tool
+- [Tailwind CSS](https://tailwindcss.com/) - CSS framework
 
-```sh
-npm run lint
-```
+## Acknowledgements
+
+Special thanks to [@ranelpadon](https://github.com/ranelpadon/ngram-type) for the original project.
+Thanks to [Monkeytype](https://monkeytype.com/) for the inspiration of the appearance of the application.
