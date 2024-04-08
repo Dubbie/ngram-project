@@ -215,7 +215,6 @@ const checkStatistics = () => {
   }
 
   emit('update-statistics', stats)
-  console.log(stats)
 
   if (accuracy < props.minAccuracy || wpm < props.minWpm) {
     reset()

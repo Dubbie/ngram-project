@@ -5,6 +5,7 @@ import NgramResults from './components/NgramResults.vue'
 import TextareaInput from './components/TextareaInput.vue'
 import AppKey from './components/AppKey.vue'
 import { computed, onMounted, ref } from 'vue'
+import AppLoading from './components/AppLoading.vue'
 
 const version = '0.1.0'
 const sourceOptions = [
@@ -45,6 +46,7 @@ const scopeOptions = [
   }
 ]
 
+const loading = ref(true)
 const statistics = ref([])
 const hideSettings = ref(false)
 const finished = ref(false)
@@ -152,6 +154,9 @@ const refreshPhrases = () => {
 
   config.value.data[config.value.data.source] = _dataSource
 
+  // save the generated data
+  saveData()
+
   finished.value = false
 }
 
@@ -163,6 +168,9 @@ const nextPhrase = () => {
     _dataSource.phrasesCurrentIndex += 1
     config.value.expectedPhrase = _dataSource.phrases[_dataSource.phrasesCurrentIndex]
     config.value.data[config.value.data.source] = _dataSource
+
+    // save the generated data
+    saveData()
   } else {
     finished.value = true
     hideSettings.value = false
@@ -188,14 +196,36 @@ const handleStatistics = (statData) => {
   statistics.value.push(statData)
 }
 
+const loadData = () => {
+  loading.value = true
+
+  // load config from localStorage
+  const configData = localStorage.getItem('config')
+  if (configData) {
+    config.value = JSON.parse(configData)
+    console.log('loaded config', config.value)
+  } else {
+    localStorage.setItem('config', JSON.stringify(config.value))
+  }
+
+  loading.value = false
+}
+
+const saveData = () => {
+  console.log('saving config', config.value)
+  localStorage.setItem('config', JSON.stringify(config.value))
+}
+
 onMounted(() => {
-  refreshPhrases()
+  loadData()
 })
 </script>
 
 <template>
   <div class="bg-zinc-800 text-white font-mono">
-    <div class="py-20 max-w-3xl mx-auto flex flex-col min-h-dvh">
+    <AppLoading v-if="loading" />
+
+    <div v-else class="py-20 max-w-3xl mx-auto flex flex-col min-h-dvh">
       <main class="flex-1">
         <AppSettings
           :config="config"
