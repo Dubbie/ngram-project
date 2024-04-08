@@ -5,6 +5,7 @@ import NgramResults from './components/NgramResults.vue'
 import TextareaInput from './components/TextareaInput.vue'
 import { computed, onMounted, ref } from 'vue'
 
+const version = '0.1.0'
 const sourceOptions = [
   {
     label: 'Bigrams',
@@ -241,7 +242,7 @@ onMounted(() => {
         <NgramResults v-else :statistics="statistics" @refresh-phrases="refreshPhrases" />
       </main>
 
-      <AppFooter class="px-1.5" />
+      <AppFooter class="px-1.5" :version="version" />
     </div>
   </div>
 </template>

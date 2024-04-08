@@ -1,4 +1,6 @@
 <script setup>
+import BarSeparator from './BarSeparator.vue'
+import InputLabel from './InputLabel.vue'
 import SelectInput from './SelectInput.vue'
 import TextInput from './TextInput.vue'
 import { computed } from 'vue'
@@ -29,56 +31,56 @@ const emit = defineEmits(['change-source', 'update-config', 'update-source-confi
   <div class="-mx-1.5 mb-6 bg-zinc-900 p-2 rounded-xl">
     <div class="flex items-center justify-center text-sm font-semibold px-2">
       <div class="flex items-center gap-x-3">
-        <label class="block text-xs font-bold">Source</label>
+        <InputLabel>Source</InputLabel>
         <SelectInput
           :model-value="config.data.source"
           :options="sources"
           @update:model-value="$emit('change-source', $event)"
         />
       </div>
-      <div class="min-w-px h-6 bg-white/30 mx-3"></div>
+      <BarSeparator />
       <div class="flex items-center gap-x-3">
-        <label class="block text-xs font-bold">Scope</label>
+        <InputLabel>Scope</InputLabel>
         <SelectInput
           :model-value="config.data[sourceName].scope"
           :options="scopes"
           @update:model-value="$emit('update-source-config', 'scope', $event)"
         />
       </div>
-      <div class="min-w-px h-6 bg-white/30 mx-3"></div>
+      <BarSeparator />
       <div class="flex items-center gap-x-3">
         <div class="flex items-center gap-x-3">
-          <label class="block text-xs font-bold">Combinations</label>
+          <InputLabel>Combinations</InputLabel>
           <TextInput
             :model-value="config.data[sourceName].combination"
-            class="w-9 text-right"
+            class="w-9 text-center"
             @update:model-value="$emit('update-source-config', 'combination', $event)"
           />
         </div>
         <div class="flex items-center gap-x-3">
-          <label class="block text-xs font-bold">Repetitions</label>
+          <InputLabel>Repetitions</InputLabel>
           <TextInput
             :model-value="config.data[sourceName].repetition"
-            class="w-9 text-right"
+            class="w-9 text-center"
             @update:model-value="$emit('update-source-config', 'repetiton', $event)"
           />
         </div>
       </div>
-      <div class="min-w-px h-6 bg-white/30 mx-3"></div>
+      <BarSeparator />
       <div class="flex items-center gap-x-3">
         <div class="flex items-center gap-x-3">
-          <label class="block text-xs font-bold">WPM</label>
+          <InputLabel>WPM</InputLabel>
           <TextInput
             :model-value="config.minWpm"
-            class="w-9 text-right"
+            class="w-9 text-center"
             @update:model-value="$emit('update-config', 'minWpm', $event)"
           />
         </div>
         <div class="flex items-center gap-x-3">
-          <label class="block text-xs font-bold">Accuracy</label>
+          <InputLabel>Accuracy</InputLabel>
           <TextInput
             :model-value="config.minAccuracy"
-            class="w-9 text-right"
+            class="w-9 text-center"
             @update:model-value="$emit('update-config', 'minAccuracy', $event)"
           />
         </div>
