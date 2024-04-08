@@ -1,5 +1,6 @@
 <script setup>
 import AppSettings from './components/AppSettings.vue'
+import NgramResults from './components/NgramResults.vue'
 import TextareaInput from './components/TextareaInput.vue'
 import { computed, onMounted, ref } from 'vue'
 
@@ -41,8 +42,9 @@ const scopeOptions = [
   }
 ]
 
-const statistics = ref(null)
+const statistics = ref([])
 const hideSettings = ref(false)
+const finished = ref(false)
 const config = ref({
   bigrams: bigrams,
   trigrams: trigrams,
@@ -146,6 +148,8 @@ const refreshPhrases = () => {
   _dataSource.phrasesCurrentIndex = 0
 
   config.value.data[config.value.data.source] = _dataSource
+
+  finished.value = false
 }
 
 const nextPhrase = () => {
@@ -157,7 +161,8 @@ const nextPhrase = () => {
     config.value.expectedPhrase = _dataSource.phrases[_dataSource.phrasesCurrentIndex]
     config.value.data[config.value.data.source] = _dataSource
   } else {
-    refreshPhrases()
+    finished.value = true
+    hideSettings.value = false
   }
 }
 
@@ -177,7 +182,7 @@ const handleConfigUpdate = (key, newData) => {
 }
 
 const handleStatistics = (statData) => {
-  statistics.value = statData
+  statistics.value.push(statData)
 }
 
 onMounted(() => {
@@ -199,29 +204,39 @@ onMounted(() => {
         :class="{ 'opacity-0': hideSettings }"
       />
 
-      <div class="grid grid-cols-6">
-        <div class="col-span-4">
-          <h1 class="text-xl font-semibold text-zinc-400 tracking-wide mb-6 mx-1.5">
-            Lesson {{ dataSource.phrasesCurrentIndex + 1 }} / {{ dataSource.phrases.length }}
-          </h1>
+      <div v-if="!finished">
+        <div class="grid grid-cols-6">
+          <div class="col-span-4">
+            <h1 class="text-xl font-semibold text-zinc-400 tracking-wide mb-6 mx-1.5">
+              Lesson {{ dataSource.phrasesCurrentIndex + 1 }} / {{ dataSource.phrases.length }}
+            </h1>
+          </div>
+          <div v-if="statistics.length > 0" class="text-sm font-semibold text-right">
+            <p>
+              <span class="text-zinc-400 text-xs mr-2">Accuracy</span
+              >{{ statistics[statistics.length - 1].accuracy }}%
+            </p>
+          </div>
+          <div v-if="statistics.length > 0" class="text-sm font-semibold text-right">
+            <p>
+              <span class="text-zinc-400 text-xs mr-2">WPM</span
+              >{{ statistics[statistics.length - 1].wpm }}
+            </p>
+          </div>
         </div>
-        <div v-if="statistics" class="text-sm font-semibold text-right">
-          <p><span class="text-zinc-400 text-xs mr-2">Accuracy</span>{{ statistics.accuracy }}%</p>
-        </div>
-        <div v-if="statistics" class="text-sm font-semibold text-right">
-          <p><span class="text-zinc-400 text-xs mr-2">WPM</span>{{ statistics.wpm }}</p>
-        </div>
+
+        <TextareaInput
+          :expected-phrase="config.expectedPhrase"
+          :min-accuracy="config.minAccuracy"
+          :min-wpm="config.minWpm"
+          @correct="nextPhrase"
+          @update-statistics="handleStatistics"
+          @started-typing="hideSettings = true"
+          @blur="hideSettings = false"
+        />
       </div>
 
-      <TextareaInput
-        :expected-phrase="config.expectedPhrase"
-        :min-accuracy="config.minAccuracy"
-        :min-wpm="config.minWpm"
-        @correct="nextPhrase"
-        @update-statistics="handleStatistics"
-        @started-typing="hideSettings = true"
-        @blur="hideSettings = false"
-      />
+      <NgramResults v-else :statistics="statistics" @refresh-phrases="refreshPhrases" />
     </main>
   </div>
 </template>

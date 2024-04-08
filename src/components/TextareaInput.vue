@@ -27,6 +27,7 @@ const lettersRef = ref([])
 const wordsRef = ref([])
 const activeWordIndex = ref(0)
 const missedCharacters = ref(0)
+const restarts = ref(-1)
 const startTime = ref(null)
 
 const getPosition = (element) => {
@@ -207,11 +208,15 @@ const checkStatistics = () => {
   const endTime = Date.now()
   const elapsedInMinutes = (endTime - startTime.value) / 1000 / 60
   const wpm = Math.round(expectedWords.value.length / elapsedInMinutes)
-
-  emit('update-statistics', {
+  const stats = {
     accuracy: accuracyFormatted,
-    wpm: wpm
-  })
+    wpm: wpm,
+    restarts: restarts.value,
+    missedCharacters: missedCharacters.value
+  }
+
+  emit('update-statistics', stats)
+  console.log(stats)
 
   if (accuracy < props.minAccuracy || wpm < props.minWpm) {
     reset()
@@ -220,6 +225,7 @@ const checkStatistics = () => {
 
   missedCharacters.value = 0
   typedPhrase.value = ''
+  restarts.value = -1
   emit('correct')
 }
 
@@ -264,6 +270,7 @@ const reset = () => {
   }
   activeWordIndex.value = 0
   missedCharacters.value = 0
+  restarts.value += 1
   startTime.value = null
 }
 
