@@ -69,12 +69,11 @@ const updateCaretPosition = () => {
 
   if (typedPhrase.value.length === 0) {
     caret.value.style.left = currentLetterPos.left - caretWidth / 2 + 'px'
-    caret.value.style.top = currentLetterPos.top + letterHeight / 4 + 'px'
   } else {
     caret.value.style.left =
       currentLetterPos.left + currentLetter.getBoundingClientRect().width - caretWidth / 2 + 'px'
-    caret.value.style.top = currentLetterPos.top + letterHeight / 4 + 'px'
   }
+  caret.value.style.top = currentLetterPos.top + letterHeight / 4 + 3 + 'px'
 }
 
 const getWordsFromPhrase = () => {
