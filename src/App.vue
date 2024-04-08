@@ -1,4 +1,5 @@
 <script setup>
+import AppFooter from './components/AppFooter.vue'
 import AppSettings from './components/AppSettings.vue'
 import NgramResults from './components/NgramResults.vue'
 import TextareaInput from './components/TextareaInput.vue'
@@ -191,52 +192,56 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="bg-zinc-800 text-white min-h-dvh py-20">
-    <main class="max-w-3xl mx-auto">
-      <AppSettings
-        :config="config"
-        :sources="sourceOptions"
-        :scopes="scopeOptions"
-        @change-source="changeNgramSource"
-        @update-source-config="handleSourceConfigUpdate"
-        @update-config="handleConfigUpdate"
-        class="transition duration-500 ease-in-out"
-        :class="{ 'opacity-0': hideSettings }"
-      />
+  <div class="bg-zinc-800 text-white font-mono">
+    <div class="py-20 max-w-3xl mx-auto flex flex-col min-h-dvh">
+      <main class="flex-1">
+        <AppSettings
+          :config="config"
+          :sources="sourceOptions"
+          :scopes="scopeOptions"
+          @change-source="changeNgramSource"
+          @update-source-config="handleSourceConfigUpdate"
+          @update-config="handleConfigUpdate"
+          class="transition duration-500 ease-in-out"
+          :class="{ 'opacity-0': hideSettings }"
+        />
 
-      <div v-if="!finished">
-        <div class="grid grid-cols-6">
-          <div class="col-span-4">
-            <h1 class="text-xl font-semibold text-zinc-400 tracking-wide mb-6 mx-1.5">
-              Lesson {{ dataSource.phrasesCurrentIndex + 1 }} / {{ dataSource.phrases.length }}
-            </h1>
+        <div v-if="!finished">
+          <div class="grid grid-cols-6">
+            <div class="col-span-4">
+              <h1 class="text-xl font-semibold text-zinc-400 tracking-wide mb-6 mx-1.5">
+                Lesson {{ dataSource.phrasesCurrentIndex + 1 }} / {{ dataSource.phrases.length }}
+              </h1>
+            </div>
+            <div v-if="statistics.length > 0" class="text-sm font-semibold text-right">
+              <p>
+                <span class="text-zinc-400 text-xs mr-2">Accuracy</span
+                >{{ statistics[statistics.length - 1].accuracy }}%
+              </p>
+            </div>
+            <div v-if="statistics.length > 0" class="text-sm font-semibold text-right">
+              <p>
+                <span class="text-zinc-400 text-xs mr-2">WPM</span
+                >{{ statistics[statistics.length - 1].wpm }}
+              </p>
+            </div>
           </div>
-          <div v-if="statistics.length > 0" class="text-sm font-semibold text-right">
-            <p>
-              <span class="text-zinc-400 text-xs mr-2">Accuracy</span
-              >{{ statistics[statistics.length - 1].accuracy }}%
-            </p>
-          </div>
-          <div v-if="statistics.length > 0" class="text-sm font-semibold text-right">
-            <p>
-              <span class="text-zinc-400 text-xs mr-2">WPM</span
-              >{{ statistics[statistics.length - 1].wpm }}
-            </p>
-          </div>
+
+          <TextareaInput
+            :expected-phrase="config.expectedPhrase"
+            :min-accuracy="config.minAccuracy"
+            :min-wpm="config.minWpm"
+            @correct="nextPhrase"
+            @update-statistics="handleStatistics"
+            @started-typing="hideSettings = true"
+            @blur="hideSettings = false"
+          />
         </div>
 
-        <TextareaInput
-          :expected-phrase="config.expectedPhrase"
-          :min-accuracy="config.minAccuracy"
-          :min-wpm="config.minWpm"
-          @correct="nextPhrase"
-          @update-statistics="handleStatistics"
-          @started-typing="hideSettings = true"
-          @blur="hideSettings = false"
-        />
-      </div>
+        <NgramResults v-else :statistics="statistics" @refresh-phrases="refreshPhrases" />
+      </main>
 
-      <NgramResults v-else :statistics="statistics" @refresh-phrases="refreshPhrases" />
-    </main>
+      <AppFooter class="px-1.5" />
+    </div>
   </div>
 </template>
