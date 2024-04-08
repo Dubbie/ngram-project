@@ -3,7 +3,25 @@ import AppSettings from './components/AppSettings.vue'
 import TextareaInput from './components/TextareaInput.vue'
 import { computed, onMounted, ref } from 'vue'
 
-const sourceOptions = ['bigrams', 'trigrams', 'tetragrams', 'words']
+const sourceOptions = [
+  {
+    label: 'Bigrams',
+    value: 'bigrams'
+  },
+  {
+    label: 'Trigrams',
+    value: 'trigrams'
+  },
+  {
+    label: 'Tetragrams',
+    value: 'tetragrams'
+  },
+  {
+    label: 'Words',
+    value: 'words'
+  }
+]
+
 const scopeOptions = [
   {
     label: '50',
@@ -24,6 +42,7 @@ const scopeOptions = [
 ]
 
 const statistics = ref(null)
+const hideSettings = ref(false)
 const config = ref({
   bigrams: bigrams,
   trigrams: trigrams,
@@ -168,7 +187,7 @@ onMounted(() => {
 
 <template>
   <div class="bg-zinc-800 text-white min-h-dvh py-20">
-    <main class="max-w-2xl mx-auto">
+    <main class="max-w-3xl mx-auto">
       <AppSettings
         :config="config"
         :sources="sourceOptions"
@@ -176,6 +195,8 @@ onMounted(() => {
         @change-source="changeNgramSource"
         @update-source-config="handleSourceConfigUpdate"
         @update-config="handleConfigUpdate"
+        class="transition duration-500 ease-in-out"
+        :class="{ 'opacity-0': hideSettings }"
       />
 
       <div class="grid grid-cols-6">
@@ -199,6 +220,8 @@ onMounted(() => {
           :min-wpm="config.minWpm"
           @correct="nextPhrase"
           @update-statistics="handleStatistics"
+          @started-typing="hideSettings = true"
+          @blur="hideSettings = false"
         />
       </div>
     </main>

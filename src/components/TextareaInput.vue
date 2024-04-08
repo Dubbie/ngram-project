@@ -142,6 +142,7 @@ const handleSpace = () => {
 
 const handleKeyup = (event) => {
   const checkCorrectness = event.keyCode !== 8
+  emit('started-typing')
   compareInput(checkCorrectness)
   blinking.value = false
   if (!startTime.value && typedPhrase.value.length > 0) {
@@ -241,6 +242,7 @@ const handleShowCaret = () => {
 const handleHideCaret = () => {
   showCaret.value = false
   blinking.value = true
+  emit('blur')
 }
 
 const resetTypedPhrase = () => {
@@ -265,7 +267,7 @@ const reset = () => {
   startTime.value = null
 }
 
-const emit = defineEmits(['correct', 'update-statistics'])
+const emit = defineEmits(['correct', 'update-statistics', 'started-typing', 'blur'])
 
 onMounted(() => {
   expectedWords.value = getWordsFromPhrase()
