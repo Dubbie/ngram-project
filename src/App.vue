@@ -213,17 +213,15 @@ onMounted(() => {
         </div>
       </div>
 
-      <div>
-        <TextareaInput
-          :expected-phrase="config.expectedPhrase"
-          :min-accuracy="config.minAccuracy"
-          :min-wpm="config.minWpm"
-          @correct="nextPhrase"
-          @update-statistics="handleStatistics"
-          @started-typing="hideSettings = true"
-          @blur="hideSettings = false"
-        />
-      </div>
+      <TextareaInput
+        :expected-phrase="config.expectedPhrase"
+        :min-accuracy="config.minAccuracy"
+        :min-wpm="config.minWpm"
+        @correct="nextPhrase"
+        @update-statistics="handleStatistics"
+        @started-typing="hideSettings = true"
+        @blur="hideSettings = false"
+      />
     </main>
   </div>
 </template>

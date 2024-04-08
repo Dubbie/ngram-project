@@ -31,7 +31,7 @@ const label = computed(() => {
   >
     <ListboxButton class="rounded-lg bg-white/10 px-2 py-0.5">{{ label }}</ListboxButton>
     <ListboxOptions
-      class="absolute top-full z-10 left-0 bg-zinc-900/70 p-1 -mx-1 rounded-lg backdrop-blur-sm"
+      class="absolute top-full z-10 left-0 bg-black/70 p-1 -mx-1 mt-1 rounded-xl backdrop-blur-sm"
     >
       <ListboxOption
         v-for="opt in options"
@@ -39,7 +39,13 @@ const label = computed(() => {
         :value="opt.value"
         v-slot="{ active, selected }"
       >
-        <div class="px-2 py-1 cursor-pointer" :class="active ? 'bg-zinc-800' : ''">
+        <div
+          class="px-2 py-1 cursor-pointer rounded-lg"
+          :class="{
+            'bg-white/10': active && !selected,
+            'bg-white text-black': selected
+          }"
+        >
           {{ opt.label }}
         </div>
       </ListboxOption>
