@@ -3,7 +3,9 @@
 <template>
   <footer class="text-xs">
     <p>
-      <a href="https://github.com/dubbie" target="_blank" class="text-zinc-400">Source code</a>
+      <a href="https://github.com/dubbie/ngram-project" target="_blank" class="text-zinc-400"
+        >Source code</a
+      >
     </p>
     <p>
       Thanks to
