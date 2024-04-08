@@ -28,7 +28,7 @@ const emit = defineEmits(['change-source', 'update-config', 'update-source-confi
 </script>
 
 <template>
-  <div class="-mx-1.5 mb-6 bg-zinc-900 p-2 rounded-xl">
+  <div class="-mx-3 mb-6 bg-zinc-900 p-2 rounded-xl">
     <div class="flex items-center justify-center text-sm font-semibold px-2">
       <div class="flex items-center gap-x-3">
         <InputLabel>Source</InputLabel>

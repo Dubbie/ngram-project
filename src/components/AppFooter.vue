@@ -11,9 +11,6 @@ const props = defineProps({
 
 <template>
   <footer class="text-xs">
-    <div class="mb-6 text-center">
-      <p><AppKey>Tab</AppKey> or <AppKey>Esc</AppKey> - reset phrase</p>
-    </div>
     <div class="flex justify-between">
       <div>
         <p>

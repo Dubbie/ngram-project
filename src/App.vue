@@ -3,6 +3,7 @@ import AppFooter from './components/AppFooter.vue'
 import AppSettings from './components/AppSettings.vue'
 import NgramResults from './components/NgramResults.vue'
 import TextareaInput from './components/TextareaInput.vue'
+import AppKey from './components/AppKey.vue'
 import { computed, onMounted, ref } from 'vue'
 
 const version = '0.1.0'
@@ -208,9 +209,9 @@ onMounted(() => {
         />
 
         <div v-if="!finished">
-          <div class="grid grid-cols-6">
+          <div class="grid grid-cols-6 mx-1.5">
             <div class="col-span-4">
-              <h1 class="text-xl font-semibold text-zinc-400 tracking-wide mb-6 mx-1.5">
+              <h1 class="text-xl font-semibold text-zinc-400 tracking-wide mb-6">
                 Lesson {{ dataSource.phrasesCurrentIndex + 1 }} / {{ dataSource.phrases.length }}
               </h1>
             </div>
@@ -237,6 +238,9 @@ onMounted(() => {
             @started-typing="hideSettings = true"
             @blur="hideSettings = false"
           />
+          <div class="mt-6 text-center text-xs opacity-50">
+            <p><AppKey>Tab</AppKey> or <AppKey>Esc</AppKey> - reset phrase</p>
+          </div>
         </div>
 
         <NgramResults v-else :statistics="statistics" @refresh-phrases="refreshPhrases" />
