@@ -4,8 +4,10 @@ import AppSettings from './components/AppSettings.vue'
 import NgramResults from './components/NgramResults.vue'
 import TextareaInput from './components/TextareaInput.vue'
 import AppKey from './components/AppKey.vue'
-import { computed, onMounted, ref } from 'vue'
+import { computed, inject, onMounted, onUnmounted, provide, ref } from 'vue'
 import AppLoading from './components/AppLoading.vue'
+import ThemeModal from './components/ThemeModal.vue'
+import { themes } from './themes/all'
 
 const version = '0.1.0'
 const sourceOptions = [
@@ -46,6 +48,9 @@ const scopeOptions = [
   }
 ]
 
+const showThemeModal = ref(false)
+const currentTheme = ref({})
+const emitter = inject('emitter')
 const loading = ref(true)
 const statistics = ref([])
 const hideSettings = ref(false)
@@ -91,8 +96,11 @@ const config = ref({
   phrases: [],
   expectedPhrase: '',
   minWpm: 40,
-  minAccuracy: 100
+  minAccuracy: 100,
+  theme: 'default'
 })
+
+provide('currentTheme', currentTheme)
 
 const dataSource = computed(() => {
   return config.value.data[config.value.data.source]
@@ -200,15 +208,29 @@ const loadData = () => {
   loading.value = true
 
   // load config from localStorage
-  const configData = localStorage.getItem('config')
-  if (configData) {
-    config.value = JSON.parse(configData)
-    console.log('loaded config', config.value)
-  } else {
+  let configData = localStorage.getItem('config')
+  if (!configData) {
     localStorage.setItem('config', JSON.stringify(config.value))
+  } else {
+    // check for version compatibility
+    configData = JSON.parse(configData)
+    if (!configData.theme) {
+      configData.theme = 'default'
+    }
+    config.value = configData
+    console.log('loaded config', config.value)
   }
 
+  // load theme here
+  loadTheme(config.value.theme)
+
   loading.value = false
+}
+
+const loadTheme = (theme) => {
+  config.value.theme = theme
+  currentTheme.value = themes[theme]
+  saveData()
 }
 
 const saveData = () => {
@@ -218,11 +240,16 @@ const saveData = () => {
 
 onMounted(() => {
   loadData()
+  emitter.on('refresh-phrases', refreshPhrases)
+})
+
+onUnmounted(() => {
+  emitter.off('refresh-phrases')
 })
 </script>
 
 <template>
-  <div class="bg-zinc-800 text-white font-mono">
+  <div class="wrapper font-mono" :style="currentTheme">
     <AppLoading v-if="loading" />
 
     <div v-else class="py-20 max-w-3xl mx-auto flex flex-col min-h-dvh">
@@ -231,29 +258,30 @@ onMounted(() => {
           :config="config"
           :sources="sourceOptions"
           :scopes="scopeOptions"
+          class="transition duration-500 ease-in-out"
+          :class="{ 'opacity-0': hideSettings }"
           @change-source="changeNgramSource"
           @update-source-config="handleSourceConfigUpdate"
           @update-config="handleConfigUpdate"
-          class="transition duration-500 ease-in-out"
-          :class="{ 'opacity-0': hideSettings }"
+          @open-theme-settings="showThemeModal = true"
         />
 
         <div v-if="!finished">
           <div class="grid grid-cols-6 mx-1.5">
             <div class="col-span-4">
-              <h1 class="text-xl font-semibold text-zinc-400 tracking-wide mb-6">
+              <h1 class="text-xl font-semibold text-secondary tracking-wide mb-6">
                 Lesson {{ dataSource.phrasesCurrentIndex + 1 }} / {{ dataSource.phrases.length }}
               </h1>
             </div>
             <div v-if="statistics.length > 0" class="text-sm font-semibold text-right">
               <p>
-                <span class="text-zinc-400 text-xs mr-2">Accuracy</span
+                <span class="text-secondary text-xs mr-2">Accuracy</span
                 >{{ statistics[statistics.length - 1].accuracy }}%
               </p>
             </div>
             <div v-if="statistics.length > 0" class="text-sm font-semibold text-right">
               <p>
-                <span class="text-zinc-400 text-xs mr-2">WPM</span
+                <span class="text-secondary text-xs mr-2">WPM</span
                 >{{ statistics[statistics.length - 1].wpm }}
               </p>
             </div>
@@ -278,5 +306,39 @@ onMounted(() => {
 
       <AppFooter class="px-1.5" :version="version" />
     </div>
+
+    <ThemeModal
+      :show="showThemeModal"
+      :theme="config.theme"
+      @close="showThemeModal = false"
+      @theme-changed="loadTheme"
+    />
   </div>
 </template>
+
+<style>
+.wrapper {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.text-primary {
+  color: var(--text-color);
+}
+
+.bg-primary {
+  background-color: var(--text-color);
+}
+
+.bg-secondary {
+  background-color: var(--bg-color-secondary);
+}
+
+.text-bg {
+  color: var(--bg-color);
+}
+
+.text-secondary {
+  color: var(--text-color-secondary);
+}
+</style>

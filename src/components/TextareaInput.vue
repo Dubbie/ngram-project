@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, watch, onUpdated } from 'vue'
+import { ref, onMounted, watch, onUpdated, inject } from 'vue'
 
 const props = defineProps({
   expectedPhrase: {
@@ -16,6 +16,7 @@ const props = defineProps({
   }
 })
 
+const theme = inject('currentTheme')
 const expectedWords = ref([])
 const typedPhrase = ref('')
 const textareaRef = ref(null)
@@ -317,10 +318,10 @@ onUpdated(() => {
             ref="lettersRef"
             class="letter"
             :class="{
-              'text-white': letter.type === 'correct',
-              'text-white/30': letter.type === 'placeholder',
-              'text-red-400': letter.type === 'incorrect',
-              'text-red-600': letter.type === 'extra-letter'
+              correct: letter.type === 'correct',
+              placeholder: letter.type === 'placeholder',
+              incorrect: letter.type === 'incorrect',
+              extra: letter.type === 'extra-letter'
             }"
             >{{ letter.letter }}</span
           >
@@ -330,7 +331,7 @@ onUpdated(() => {
 
     <div
       ref="caret"
-      class="absolute w-[2px] bg-white h-6 transition-all duration-100"
+      class="absolute caret w-[3px] h-6 transition-all duration-100"
       :class="{
         'caret-blink': blinking
       }"
@@ -339,7 +340,24 @@ onUpdated(() => {
   </div>
 </template>
 
-<style>
+<style scoped>
+.letter.placeholder {
+  color: var(--text-color-placeholder);
+}
+.letter.correct {
+  color: var(--text-color-correct);
+}
+.letter.incorrect {
+  color: var(--text-color-incorrect);
+}
+.letter.extra {
+  color: var(--text-color-extra);
+}
+
+.caret {
+  background-color: var(--caret-color);
+}
+
 .caret-blink {
   animation: blink-caret 800ms infinite;
 }

@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, inject, onMounted, onUnmounted } from 'vue'
 
 const props = defineProps({
   statistics: {
@@ -7,6 +7,8 @@ const props = defineProps({
     required: true
   }
 })
+
+const emitter = inject('emitter')
 
 const averageWpm = computed(() => {
   return Math.round(
@@ -38,6 +40,19 @@ const missedCharacters = computed(() => {
 })
 
 const emit = defineEmits(['refresh-phrases'])
+
+onMounted(() => {
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Tab') {
+      e.preventDefault()
+      emitter.emit('refresh-phrases')
+    }
+  })
+})
+
+onUnmounted(() => {
+  window.removeEventListener('keydown')
+})
 </script>
 
 <template>
