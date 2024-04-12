@@ -147,7 +147,7 @@ const generatePhrases = (numberOfItemsToCombine, repetitions) => {
   return phrases
 }
 
-const refreshPhrases = () => {
+const refreshPhrases = (resetFinished = true) => {
   let _dataSource = dataSource.value
 
   if (_dataSource.combination < 1) {
@@ -164,7 +164,9 @@ const refreshPhrases = () => {
   // save the generated data
   saveData()
 
-  finished.value = false
+  if (resetFinished) {
+    finished.value = false
+  }
 }
 
 const nextPhrase = () => {
@@ -175,13 +177,14 @@ const nextPhrase = () => {
     _dataSource.phrasesCurrentIndex += 1
     config.value.expectedPhrase = _dataSource.phrases[_dataSource.phrasesCurrentIndex]
     config.value.data[config.value.data.source] = _dataSource
-
-    // save the generated data
-    saveData()
   } else {
     finished.value = true
     hideSettings.value = false
+
+    refreshPhrases(false)
   }
+
+  saveData()
 }
 
 const changeNgramSource = (newSource) => {
@@ -206,6 +209,13 @@ const handleStatistics = (statData) => {
 const loadData = () => {
   loading.value = true
 
+  loadConfig()
+  loadTheme(config.value.theme)
+
+  loading.value = false
+}
+
+const loadConfig = () => {
   // load config from localStorage
   let configData = localStorage.getItem('config')
   if (!configData) {
@@ -218,11 +228,6 @@ const loadData = () => {
     }
     config.value = configData
   }
-
-  // load theme here
-  loadTheme(config.value.theme)
-
-  loading.value = false
 }
 
 const loadTheme = (theme) => {
