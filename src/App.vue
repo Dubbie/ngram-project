@@ -141,7 +141,6 @@ const generatePhrases = (numberOfItemsToCombine, repetitions) => {
       _phrase.push(subPhrase)
     }
     phrases.push(_phrase.join(' '))
-    // Remove the processed ngrams.
     ngrams.splice(0, numberOfItemsToCombine)
   }
 
@@ -154,8 +153,6 @@ const refreshPhrases = () => {
   if (_dataSource.combination < 1) {
     _dataSource.combination = 1
   }
-
-  console.log('datasource', _dataSource)
 
   _dataSource.phrases = generatePhrases(_dataSource.combination, _dataSource.repetition)
   config.value.phrases = _dataSource.phrases
@@ -220,7 +217,6 @@ const loadData = () => {
       configData.theme = 'default'
     }
     config.value = configData
-    console.log('loaded config', config.value)
   }
 
   // load theme here
@@ -236,7 +232,6 @@ const loadTheme = (theme) => {
 }
 
 const saveData = () => {
-  console.log('saving config', config.value)
   localStorage.setItem('config', JSON.stringify(config.value))
 }
 
