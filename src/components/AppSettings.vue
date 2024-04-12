@@ -67,7 +67,7 @@ const emit = defineEmits([
           <TextInput
             :model-value="config.data[sourceName].repetition"
             class="w-9 text-center"
-            @update:model-value="$emit('update-source-config', 'repetiton', $event)"
+            @update:model-value="$emit('update-source-config', 'repetition', $event)"
           />
         </div>
       </div>

@@ -39,19 +39,21 @@ const missedCharacters = computed(() => {
   }, 0)
 })
 
+const handleTab = (event) => {
+  if (event.keyCode === 9) {
+    event.preventDefault()
+    emitter.emit('refresh-phrases')
+  }
+}
+
 const emit = defineEmits(['refresh-phrases'])
 
 onMounted(() => {
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'Tab') {
-      e.preventDefault()
-      emitter.emit('refresh-phrases')
-    }
-  })
+  window.addEventListener('keydown', handleTab)
 })
 
 onUnmounted(() => {
-  window.removeEventListener('keydown')
+  window.removeEventListener('keydown', handleTab)
 })
 </script>
 

@@ -155,6 +155,8 @@ const refreshPhrases = () => {
     _dataSource.combination = 1
   }
 
+  console.log('datasource', _dataSource)
+
   _dataSource.phrases = generatePhrases(_dataSource.combination, _dataSource.repetition)
   config.value.phrases = _dataSource.phrases
   config.value.expectedPhrase = _dataSource.phrases[0]
