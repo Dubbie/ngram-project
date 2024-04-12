@@ -324,6 +324,10 @@ onUnmounted(() => {
 }
 
 .bg-primary {
+  background-color: var(--bg-color);
+}
+
+.bg-text {
   background-color: var(--text-color);
 }
 

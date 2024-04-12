@@ -11,7 +11,7 @@ const emit = defineEmits(['close'])
 
 <template>
   <div v-show="props.show" class="fixed inset-0 z-10">
-    <div class="absolute inset-0 bg-zinc-900 opacity-50 -z-10" @click="emit('close')"></div>
+    <div class="absolute inset-0 bg-primary opacity-50 -z-10" @click="emit('close')"></div>
 
     <transition
       enter-active-class="transition transform ease-out duration-100"
@@ -22,7 +22,7 @@ const emit = defineEmits(['close'])
       leave-from-class="opacity-100 scale-100"
     >
       <div
-        class="max-w-lg mx-auto mt-10 flex items-center justify-center bg-zinc-900 text-white p-6 z-20 rounded-2xl"
+        class="max-w-lg mx-auto mt-10 flex items-center justify-center text-primary bg-secondary p-6 z-20 rounded-2xl"
         v-show="props.show"
       >
         <slot />
