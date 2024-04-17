@@ -69,7 +69,10 @@ onUnmounted(() => {
     </div>
 
     <div class="flex gap-x-6 mt-12">
-      <p @click="$emit('refresh-phrases')" class="text-zinc-400 cursor-pointer hover:text-white">
+      <p
+        @click="$emit('refresh-phrases')"
+        class="opacity-60 text-primary cursor-pointer hover:opacity-100"
+      >
         Go again
       </p>
     </div>
