@@ -62,10 +62,10 @@ onUnmounted(() => {
     <p class="text-5xl mb-6">You did it!</p>
 
     <div class="flex gap-x-6 text-4xl">
-      <p><span class="text-zinc-400 text-lg">wpm:</span> {{ averageWpm }}</p>
-      <p><span class="text-zinc-400 text-lg">acc:</span> {{ averageAccuracy }}%</p>
-      <p><span class="text-zinc-400 text-lg">restarts:</span> {{ restarts }}</p>
-      <p><span class="text-zinc-400 text-lg">missed:</span> {{ missedCharacters }}</p>
+      <p><span class="text-secondary text-lg">wpm:</span> {{ averageWpm }}</p>
+      <p><span class="text-secondary text-lg">acc:</span> {{ averageAccuracy }}%</p>
+      <p><span class="text-secondary text-lg">restarts:</span> {{ restarts }}</p>
+      <p><span class="text-secondary text-lg">missed:</span> {{ missedCharacters }}</p>
     </div>
 
     <div class="flex gap-x-6 mt-12">
