@@ -269,25 +269,9 @@ onUnmounted(() => {
         />
 
         <div v-if="!finished">
-          <div class="grid grid-cols-6 mx-1.5">
-            <div class="col-span-4">
-              <h1 class="text-xl font-semibold text-secondary tracking-wide mb-6">
-                Lesson {{ dataSource.phrasesCurrentIndex + 1 }} / {{ dataSource.phrases.length }}
-              </h1>
-            </div>
-            <div v-if="statistics.length > 0" class="text-sm font-semibold text-right">
-              <p>
-                <span class="text-secondary text-xs mr-2">Accuracy</span
-                >{{ statistics[statistics.length - 1].accuracy }}%
-              </p>
-            </div>
-            <div v-if="statistics.length > 0" class="text-sm font-semibold text-right">
-              <p>
-                <span class="text-secondary text-xs mr-2">WPM</span
-                >{{ statistics[statistics.length - 1].wpm }}
-              </p>
-            </div>
-          </div>
+          <h1 class="text-xl font-semibold text-secondary tracking-wide mb-6 mx-1.5">
+            Lesson {{ dataSource.phrasesCurrentIndex + 1 }} / {{ dataSource.phrases.length }}
+          </h1>
 
           <TextareaInput
             :expected-phrase="config.expectedPhrase"
@@ -324,8 +308,12 @@ onUnmounted(() => {
   color: var(--text-color);
 }
 
-.text-primary {
+.text-default {
   color: var(--text-color);
+}
+
+.text-primary {
+  color: var(--text-color-primary);
 }
 
 .bg-primary {

@@ -305,7 +305,7 @@ onUpdated(() => {
       rows="1"
     ></textarea>
 
-    <div class="font-mono cursor-text" @click="focusTextarea">
+    <div class="font-mono font-medium cursor-text" @click="focusTextarea">
       <div ref="textContainer" class="flex flex-wrap">
         <div
           v-for="(word, index) in expectedWords"

@@ -1,6 +1,4 @@
 <script setup>
-import AppKey from './AppKey.vue'
-
 const props = defineProps({
   version: {
     type: String,
@@ -15,16 +13,16 @@ const props = defineProps({
       <div>
         <p>
           Thanks to
-          <a href="https://github.com/ranelpadon/ngram-type" target="_blank" class="text-secondary"
+          <a href="https://github.com/ranelpadon/ngram-type" target="_blank" class="text-primary"
             >ngram type</a
           >
           for the base of the code and
-          <a href="https://monkeytype.com/" target="_blank" class="text-secondary">Monkeytype</a>
+          <a href="https://monkeytype.com/" target="_blank" class="text-primary">Monkeytype</a>
           for the inspiration
         </p>
         <p>
           You can find the source code on
-          <a href="https://github.com/dubbie/ngram-project" target="_blank" class="text-secondary"
+          <a href="https://github.com/dubbie/ngram-project" target="_blank" class="text-primary"
             >GitHub</a
           >
         </p>

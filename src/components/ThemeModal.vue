@@ -1,4 +1,5 @@
 <script setup>
+import AppButton from './AppButton.vue'
 import AppModal from './AppModal.vue'
 import SelectInput from './SelectInput.vue'
 import { themes } from '@/themes/all'
@@ -37,6 +38,10 @@ const emit = defineEmits(['close', 'theme-changed'])
         :options="themeOptions"
         @update:model-value="handleChange"
       />
+    </div>
+
+    <div class="mt-6">
+      <AppButton @click="emit('close')">Close</AppButton>
     </div>
   </AppModal>
 </template>

@@ -22,7 +22,7 @@ const emit = defineEmits(['close'])
       leave-from-class="opacity-100 scale-100"
     >
       <div
-        class="max-w-lg mx-auto mt-10 flex items-center justify-center text-primary bg-secondary p-6 z-20 rounded-2xl"
+        class="max-w-lg mx-auto mt-10 text-default bg-secondary p-6 z-20 rounded-2xl"
         v-show="props.show"
       >
         <slot />
